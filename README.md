@@ -1,13 +1,13 @@
-# dotnet-6-signup-verification-api
+# .NET 7 Signup & Verification Service
 
-.NET 7.0 - Boilerplate API Sign Up with Email, and mobile Verification, Authentication & Forgot Password.
-
+.NET 7.0 - API to Sign Up with Email and mobile Verification, Authentication & Forgot Password.
 
 The inspiration come from:
 
-Documentation at https://jasonwatmore.com/post/2022/02/26/net-6-boilerplate-api-tutorial-with-email-sign-up-verification-authentication-forgot-password
+Documentation at: [jasonwatmore](https://jasonwatmore.com/post/2022/02/26/net-6-boilerplate-api-tutorial-with-email-sign-up-verification-authentication-forgot-password)
 
-Documentación en español en https://jasonwatmore.es/post/2022/02/26/net-6-tutorial-de-api-estandar-con-registro-de-correo-electronico-verificacion-autenticacion-y-contrasena-olvidada
+
+Documentación en [jasonwatmore-español](https://jasonwatmore.es/post/2022/02/26/net-6-tutorial-de-api-estandar-con-registro-de-correo-electronico-verificacion-autenticacion-y-contrasena-olvidada)
 
 
 ### Install dotnet ef tools
@@ -47,6 +47,7 @@ You can use fake Email Verification by using: [ethereal](https://ethereal.email/
 
 You can use Mobile Verification by using: [twilio](https://www.twilio.com/)
 
+
 In order to do that a valid Twilio account is required.
 
 
@@ -75,5 +76,4 @@ scripts/start.sh
 
 # To run the solution tests
 scripts/test.sh
-
 ```
