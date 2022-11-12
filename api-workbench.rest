@@ -1,0 +1,113 @@
+###############################################################################
+# Use this file inside Visual Studio code with 'REST Client' plugin 
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+###############################################################################
+
+@url = https://localhost:51685
+@payload = hello
+
+@accountId = 1
+
+@password = Sup3rS3CretPwd!
+@verificationToken = <<your token>>
+@bearerToken = <<your bearer token>>
+
+
+### Register new account
+POST {{url}}/accounts/register
+Content-Type: application/json
+
+{
+  "title": "mr",
+  "firstName": "Johan",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "mobile": "+393290123456",
+  "password": "{{password}}",
+  "confirmPassword": "{{password}}",
+  "acceptTerms": true
+}
+
+
+### Validate Email
+POST {{url}}/accounts/verify-email
+Content-Type: application/json
+
+{
+  "token": "{{verificationToken}}"
+}
+
+
+### Request to validate mobile 
+POST {{url}}/accounts/{{accountId}}/request-verify-mobile
+Content-Type: application/json
+
+{
+}
+
+
+### Validate mobile 
+POST {{url}}/accounts/{{accountId}}/verify-mobile
+Content-Type: application/json
+
+{
+  "code": "222202"
+}
+
+
+### Sign in (Login)
+POST {{url}}/accounts/authenticate
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com",
+  "password": "{{password}}!"
+}
+
+
+### Refresh token
+POST {{url}}/accounts/refresh-token
+Content-Type: application/json
+
+{
+
+}
+
+
+### Revoke token
+POST {{url}}/accounts/revoke-token
+Content-Type: application/json
+Authorization: bearer {{bearerToken}}
+
+{
+  "token": "{{verificationToken}}"
+}
+
+
+### Validate refresh token
+POST {{url}}/accounts/validate-reset-token
+Content-Type: application/json
+
+{
+  "token": "{{verificationToken}}"
+}
+
+
+### Forgot password
+POST {{url}}/accounts/forgot-password
+Content-Type: application/json
+
+{
+  "email": "john.doe@example.com"
+}
+
+
+### Reset password
+POST {{url}}/accounts/reset-password
+Content-Type: application/json
+
+{
+  "token": "{{verificationToken}}",
+  "password": "{{password}}!",
+  "confirmPassword": "{{password}}!"
+}
