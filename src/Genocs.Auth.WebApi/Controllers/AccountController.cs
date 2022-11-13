@@ -9,11 +9,11 @@ using WebApi.Authorization;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class AccountsController : BaseController
+public class AccountController : BaseController
 {
     private readonly IAccountService _accountService;
 
-    public AccountsController(IAccountService accountService)
+    public AccountController(IAccountService accountService)
     {
         _accountService = accountService;
     }

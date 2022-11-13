@@ -3,18 +3,18 @@
 # https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 ###############################################################################
 
-@url = https://localhost:51685
+@url = http://localhost:5080
 @payload = hello
 
-@accountId = 1
+@accountId = 3
 
 @password = Sup3rS3CretPwd!
-@verificationToken = <<your token>>
-@bearerToken = <<your bearer token>>
+@verificationToken = 6336C0F5FCB41469413B91B3737CC69528ACE79056A00BF0A7BE923BF2D8F47FA3E56C523C73A52FD1629D5485EAF054FB57710E1B7BD250CECF0DF6BA2B7187
+@bearerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJuYmYiOjE2NjgyNzkzNDIsImV4cCI6MTY2ODI4MDI0MiwiaWF0IjoxNjY4Mjc5MzQyfQ.Bn3frcM5VEJgGjc5ZHUxTOgAOuHpAxnx7BPzCZuhbwc
 
 
 ### Register new account
-POST {{url}}/accounts/register
+POST {{url}}/account/register
 Content-Type: application/json
 
 {
@@ -22,7 +22,7 @@ Content-Type: application/json
   "firstName": "Johan",
   "lastName": "Doe",
   "email": "john.doe@example.com",
-  "mobile": "+393290123456",
+  "mobile": "+393290723091",
   "password": "{{password}}",
   "confirmPassword": "{{password}}",
   "acceptTerms": true
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 
 ### Validate Email
-POST {{url}}/accounts/verify-email
+POST {{url}}/account/verify-email
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 
 
 ### Request to validate mobile 
-POST {{url}}/accounts/{{accountId}}/request-verify-mobile
+POST {{url}}/account/{{accountId}}/request-verify-mobile
 Content-Type: application/json
 
 {
@@ -47,26 +47,26 @@ Content-Type: application/json
 
 
 ### Validate mobile 
-POST {{url}}/accounts/{{accountId}}/verify-mobile
+POST {{url}}/account/{{accountId}}/verify-mobile
 Content-Type: application/json
 
 {
-  "code": "222202"
+  "code": "478256"
 }
 
 
 ### Sign in (Login)
-POST {{url}}/accounts/authenticate
+POST {{url}}/account/authenticate
 Content-Type: application/json
 
 {
   "email": "john.doe@example.com",
-  "password": "{{password}}!"
+  "password": "{{password}}"
 }
 
 
 ### Refresh token
-POST {{url}}/accounts/refresh-token
+POST {{url}}/account/refresh-token
 Content-Type: application/json
 
 {
@@ -75,7 +75,7 @@ Content-Type: application/json
 
 
 ### Revoke token
-POST {{url}}/accounts/revoke-token
+POST {{url}}/account/revoke-token
 Content-Type: application/json
 Authorization: bearer {{bearerToken}}
 
@@ -85,7 +85,7 @@ Authorization: bearer {{bearerToken}}
 
 
 ### Validate refresh token
-POST {{url}}/accounts/validate-reset-token
+POST {{url}}/account/validate-reset-token
 Content-Type: application/json
 
 {
@@ -94,7 +94,7 @@ Content-Type: application/json
 
 
 ### Forgot password
-POST {{url}}/accounts/forgot-password
+POST {{url}}/account/forgot-password
 Content-Type: application/json
 
 {
@@ -103,7 +103,7 @@ Content-Type: application/json
 
 
 ### Reset password
-POST {{url}}/accounts/reset-password
+POST {{url}}/account/reset-password
 Content-Type: application/json
 
 {

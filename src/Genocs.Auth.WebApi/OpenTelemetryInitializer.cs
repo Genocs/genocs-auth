@@ -6,25 +6,36 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System.Diagnostics;
 
-
 internal static class OpenTelemetryInitializer
 {
     public static void Initialize(WebApplicationBuilder builder)
     {
+
         builder.Services.AddOpenTelemetryTracing(x =>
         {
-            x.SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService("IssuerApi")
+            string? serviceName = builder.Configuration.GetSection("AppSettings")?.GetValue(typeof(string), "ServiceName") as string;
+
+            var providerBuilder = x.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                    .AddService(serviceName)
                     .AddTelemetrySdk()
                     .AddEnvironmentVariableDetector())
-                .AddAspNetCoreInstrumentation()
-                .AddAzureMonitorTraceExporter(o =>
+                .AddAspNetCoreInstrumentation();
+
+            string? connectionString = builder.Configuration.GetConnectionString("ApplicationInsights");
+            if (!string.IsNullOrWhiteSpace(connectionString))
+            {
+                providerBuilder.AddAzureMonitorTraceExporter(o =>
                 {
-                    o.ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsights");
-                })
-                .AddJaegerExporter(o =>
+                    o.ConnectionString = connectionString;
+                });
+            }
+
+            string? jaegerHost = builder.Configuration.GetSection("Monitoring")?.GetValue(typeof(string), "Jaeger") as string;
+            if (!string.IsNullOrWhiteSpace(jaegerHost))
+            {
+                providerBuilder.AddJaegerExporter(o =>
                 {
-                    o.AgentHost = "localhost";
+                    o.AgentHost = jaegerHost;
                     o.AgentPort = 6831;
                     o.MaxPayloadSizeInBytes = 4096;
                     o.ExportProcessorType = ExportProcessorType.Batch;
@@ -36,6 +47,7 @@ internal static class OpenTelemetryInitializer
                         MaxExportBatchSize = 512,
                     };
                 });
+            }
         });
     }
 }

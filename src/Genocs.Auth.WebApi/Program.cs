@@ -22,10 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console());
 
-// ***********************************************
-// Open Telemetry - START
+// Setup Open Telemetry
 OpenTelemetryInitializer.Initialize(builder);
-// Open Telemetry - END
 // ***********************************************
 
 
@@ -73,7 +71,6 @@ using (var scope = app.Services.CreateScope())
     var dataContext = scope.ServiceProvider.GetRequiredService<SqlServerDbContext>();
     dataContext.Database.Migrate();
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

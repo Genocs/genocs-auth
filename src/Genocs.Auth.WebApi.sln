@@ -14,7 +14,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Components", "External Components", "{EB2D7B2A-35B6-4A78-8012-1BF4D1598C68}"
 	ProjectSection(SolutionItems) = preProject
 		..\api-workbench.rest = ..\api-workbench.rest
+		..\Dockerfile = ..\Dockerfile
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genocs.Auth.UnitTests", "Genocs.Auth.UnitTests\Genocs.Auth.UnitTests.csproj", "{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{83D80D35-BF95-45B3-9E34-8C5758F2F8CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +43,16 @@ Global
 		{00C7BE8F-2CE1-4AAA-BD7F-4C8447587AB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00C7BE8F-2CE1-4AAA-BD7F-4C8447587AB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00C7BE8F-2CE1-4AAA-BD7F-4C8447587AB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F654CC7-635A-4C96-AD0D-4F5B54656CB6} = {83D80D35-BF95-45B3-9E34-8C5758F2F8CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19BCBD44-902E-4D6C-894E-39E307222452}
