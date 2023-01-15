@@ -1,11 +1,11 @@
-namespace Genocs.Auth.WebApi.Services;
-
 using Genocs.Auth.WebApi.Helpers;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
+
+namespace Genocs.Auth.WebApi.Services;
 
 public interface IEmailService
 {

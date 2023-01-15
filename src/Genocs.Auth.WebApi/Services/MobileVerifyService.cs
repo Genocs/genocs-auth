@@ -1,9 +1,9 @@
-namespace Genocs.Auth.WebApi.Services;
-
 using Genocs.Auth.WebApi.Helpers;
 using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Verify.V2.Service;
+
+namespace Genocs.Auth.WebApi.Services;
 
 public interface IMobileService
 {

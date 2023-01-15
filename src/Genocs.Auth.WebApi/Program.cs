@@ -1,17 +1,19 @@
 ﻿using Genocs.Auth.DataSqlServer;
-using Genocs.Auth.WebApi;
 using Genocs.Auth.WebApi.Authorization;
 using Genocs.Auth.WebApi.Helpers;
 using Genocs.Auth.WebApi.Services;
+using Genocs.Monitoring;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Events;
 using System.Text.Json.Serialization;
 
+
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .CreateLogger();
@@ -19,16 +21,23 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((ctx, lc) => lc
-    .WriteTo.Console());
 
-// Setup Open Telemetry
-OpenTelemetryInitializer.Initialize(builder);
-// ***********************************************
+builder.Host.UseSerilog((ctx, lc) =>
+{
+    lc.WriteTo.Console();
+    lc.WriteTo.ApplicationInsights(new TelemetryConfiguration
+    {
+        ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsights")
+    }, TelemetryConverter.Traces);
+
+});
 
 
 // add services to DI container
 var services = builder.Services;
+
+// Set Custom Open telemetry
+services.AddCustomOpenTelemetry(builder.Configuration);
 
 
 services.AddDbContext<SqlServerDbContext>();
@@ -38,6 +47,16 @@ services.AddControllers().AddJsonOptions(x =>
     // serialize enums as strings in api responses (e.g. Role)
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+
+services.AddHealthChecks();
+
+services.Configure<HealthCheckPublisherOptions>(options =>
+{
+    options.Delay = TimeSpan.FromSeconds(2);
+    options.Predicate = check => check.Tags.Contains("ready");
+});
+
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -79,7 +98,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 // global cors policy
 app.UseCors(x => x
     .SetIsOriginAllowed(origin => true)
@@ -100,6 +118,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
 

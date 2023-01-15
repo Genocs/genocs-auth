@@ -1,8 +1,8 @@
-namespace Genocs.Auth.WebApi.Authorization;
-
 using Genocs.Auth.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+
+namespace Genocs.Auth.WebApi.Authorization;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
