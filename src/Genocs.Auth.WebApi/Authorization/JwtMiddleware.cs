@@ -1,26 +1,16 @@
 namespace Genocs.Auth.WebApi.Authorization;
 
 using Genocs.Auth.DataSqlServer;
-using Genocs.Auth.WebApi.Helpers;
-using Microsoft.Extensions.Options;
 
-public class JwtMiddleware
+public class JwtMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-    private readonly AppSettings _appSettings;
-
-    public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
-    {
-        _next = next;
-        _appSettings = appSettings.Value;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task Invoke(HttpContext context, SqlServerDbContext dataContext, IJwtUtils jwtUtils)
     {
-        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        var token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
         if (!string.IsNullOrWhiteSpace(token))
         {
-
             var accountId = jwtUtils.ValidateJwtToken(token);
             if (accountId != null)
             {

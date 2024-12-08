@@ -16,7 +16,7 @@ using System.Text;
 
 public interface IAccountService
 {
-    AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress);
+    AuthenticateResponse Authenticate(AuthenticateRequest model, string? ipAddress);
     AuthenticateResponse RefreshToken(string? token, string? ipAddress);
     void RevokeToken(string token, string ipAddress);
     void Register(RegisterRequest model, string origin);
@@ -52,10 +52,7 @@ public class AccountService : IAccountService
                           IEmailService emailService,
                           IMobileService mobileService)
     {
-        if (appSettings is null)
-        {
-            throw new ArgumentNullException(nameof(appSettings));
-        }
+        ArgumentNullException.ThrowIfNull(appSettings);
 
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _jwtUtils = jwtUtils ?? throw new ArgumentNullException(nameof(jwtUtils));
@@ -65,7 +62,7 @@ public class AccountService : IAccountService
         _mobileService = mobileService ?? throw new ArgumentNullException(nameof(mobileService));
     }
 
-    public AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress)
+    public AuthenticateResponse Authenticate(AuthenticateRequest model, string? ipAddress)
     {
         var account = _context.Accounts.SingleOrDefault(x => x.Email == model.Email);
 

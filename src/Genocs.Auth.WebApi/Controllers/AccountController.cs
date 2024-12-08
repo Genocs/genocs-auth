@@ -9,14 +9,9 @@ using WebApi.Authorization;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class AccountController : BaseController
+public class AccountController(IAccountService accountService) : BaseController
 {
-    private readonly IAccountService _accountService;
-
-    public AccountController(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
+    private readonly IAccountService _accountService = accountService;
 
     [AllowAnonymous]
     [HttpPost("authenticate")]
@@ -183,8 +178,8 @@ public class AccountController : BaseController
 
     private string? GetIpAddress()
     {
-        if (Request.Headers.ContainsKey("X-Forwarded-For"))
-            return Request.Headers["X-Forwarded-For"];
+        if (Request.Headers.TryGetValue("X-Forwarded-For", out Microsoft.Extensions.Primitives.StringValues value))
+            return value;
         else
             return HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4().ToString();
     }

@@ -12,14 +12,9 @@ public interface IEmailService
     void Send(string to, string subject, string html, string? from = null);
 }
 
-public class EmailService : IEmailService
+public class EmailService(IOptions<AppSettings> appSettings) : IEmailService
 {
-    private readonly AppSettings _appSettings;
-
-    public EmailService(IOptions<AppSettings> appSettings)
-    {
-        _appSettings = appSettings.Value;
-    }
+    private readonly AppSettings _appSettings = appSettings.Value;
 
     public void Send(string to, string subject, string html, string? from = null)
     {

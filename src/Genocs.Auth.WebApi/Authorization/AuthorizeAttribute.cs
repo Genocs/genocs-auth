@@ -11,7 +11,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
     public AuthorizeAttribute(params Role[] roles)
     {
-        _roles = roles ?? new Role[] { };
+        _roles = roles ?? [];
     }
 
     public void OnAuthorization(AuthorizationFilterContext context)

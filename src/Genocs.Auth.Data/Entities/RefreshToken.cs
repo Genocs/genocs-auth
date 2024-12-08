@@ -3,7 +3,7 @@ namespace Genocs.Auth.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-[Owned] 
+[Owned]
 public class RefreshToken
 {
     [Key]

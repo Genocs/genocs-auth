@@ -6,13 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 public class HomeController : BaseController
 {
 
-    public HomeController()
-    {
-    }
-
     [HttpGet("")]
     public IActionResult Home()
     {
-        return Ok("Genocs - NET7 Auth Web API. Legal Disclaimer here...");
+        return Ok("Genocs - Auth Web API.");
     }
 }

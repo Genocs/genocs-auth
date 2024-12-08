@@ -57,7 +57,6 @@ services.Configure<HealthCheckPublisherOptions>(options =>
     options.Predicate = check => check.Tags.Contains("ready");
 });
 
-
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Genocs.Auth.WebApi": {
+    "Local": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

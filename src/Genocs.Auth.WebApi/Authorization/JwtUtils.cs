@@ -13,22 +13,15 @@ using System.Text;
 public interface IJwtUtils
 {
     public string GenerateJwtToken(Account account);
-    public int? ValidateJwtToken(string token);
-    public RefreshToken GenerateRefreshToken(string ipAddress);
+    public int? ValidateJwtToken(string? token);
+    public RefreshToken GenerateRefreshToken(string? ipAddress);
 }
 
-public class JwtUtils : IJwtUtils
+public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSettings)
+    : IJwtUtils
 {
-    private readonly SqlServerDbContext _context;
-    private readonly AppSettings _appSettings;
-
-    public JwtUtils(
-        SqlServerDbContext context,
-        IOptions<AppSettings> appSettings)
-    {
-        _context = context;
-        _appSettings = appSettings.Value;
-    }
+    private readonly SqlServerDbContext _context = context;
+    private readonly AppSettings _appSettings = appSettings.Value;
 
     public string GenerateJwtToken(Account account)
     {
@@ -45,7 +38,7 @@ public class JwtUtils : IJwtUtils
         return tokenHandler.WriteToken(token);
     }
 
-    public int? ValidateJwtToken(string token)
+    public int? ValidateJwtToken(string? token)
     {
         if (token == null)
             return null;
@@ -77,7 +70,7 @@ public class JwtUtils : IJwtUtils
         }
     }
 
-    public RefreshToken GenerateRefreshToken(string ipAddress)
+    public RefreshToken GenerateRefreshToken(string? ipAddress)
     {
         var refreshToken = new RefreshToken
         {

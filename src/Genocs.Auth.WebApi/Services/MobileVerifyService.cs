@@ -8,7 +8,6 @@ namespace Genocs.Auth.WebApi.Services;
 public interface IMobileService
 {
     void Request(string phoneNumber);
-
     void Verify(string phoneNumber, string code);
 }
 
@@ -29,7 +28,6 @@ public class MobileVerifyService : IMobileService
             channel: "sms",
             pathServiceSid: _appSettings.SmsServiceId
         );
-
     }
 
     public void Verify(string phoneNumber, string code)

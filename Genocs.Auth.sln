@@ -11,10 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.Auth.Data", "src\Gen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.Auth.DataSqlServer", "src\Genocs.Auth.DataSqlServer\Genocs.Auth.DataSqlServer.csproj", "{00C7BE8F-2CE1-4AAA-BD7F-4C8447587AB0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Components", "External Components", "{EB2D7B2A-35B6-4A78-8012-1BF4D1598C68}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{EB2D7B2A-35B6-4A78-8012-1BF4D1598C68}"
 	ProjectSection(SolutionItems) = preProject
 		api-workbench.rest = api-workbench.rest
 		Dockerfile = Dockerfile
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Genocs.Auth.UnitTests", "src\Genocs.Auth.UnitTests\Genocs.Auth.UnitTests.csproj", "{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}"
