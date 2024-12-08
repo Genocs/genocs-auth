@@ -59,10 +59,11 @@ builder.Services.AddAuthorization();
 //builder.Services.AddOpenApi();
 
 
-//builder.Services.AddAuthorizationBuilder()
-//  .AddPolicy("admin_greetings", policy =>
-//        policy
-//            .RequireClaim("scope", "hardcoded_scope", "admin_greetings"));
+builder.Services.AddAuthorizationBuilder()
+  .AddPolicy("admin_greetings_full", policy =>
+        policy
+            .RequireClaim("admin_greetings", "middle")
+            .Build());
 
 
 services.AddHealthChecks();
@@ -147,7 +148,7 @@ app.MapGet("/secret2", () => "This is a different secret!")
     .RequireAuthorization(policy => policy.RequireClaim("admin_greetings", "full").Build());
 
 app.MapGet("/secret3", () => "This is a different secret!")
-    .RequireAuthorization(policy => policy.RequireClaim("admin_greetings", "full").Build());
+    .RequireAuthorization("admin_greetings_full");
 
 app.Run();
 
