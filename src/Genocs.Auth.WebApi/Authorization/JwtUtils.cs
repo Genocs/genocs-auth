@@ -2,7 +2,7 @@ namespace Genocs.Auth.WebApi.Authorization;
 
 using Genocs.Auth.Data.Entities;
 using Genocs.Auth.DataSqlServer;
-using Genocs.Auth.WebApi.Helpers;
+using Genocs.Auth.WebApi.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,8 +29,16 @@ public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSetti
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", account.Id.ToString()) }),
+        {            
+            Subject = new ClaimsIdentity([
+                new Claim("id", account.Id.ToString()), 
+                new Claim("role", account.Role.ToString()), 
+                new Claim("scope", "hardcoded_scope"),
+                new Claim("admin_greetings", "hardcoded_scope", ClaimValueTypes.String),
+                new Claim("admin_greetings", "full", ClaimValueTypes.String),
+                new Claim("aud", "http://localhost:1012", ClaimValueTypes.String),
+                new Claim("aud", "http://localhost:1013", ClaimValueTypes.String)]),
+            IssuedAt = DateTime.UtcNow,
             Expires = DateTime.UtcNow.AddMinutes(15),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };

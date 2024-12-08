@@ -114,6 +114,7 @@ public class AccountController(IAccountService accountService) : BaseController
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Role.Admin)]
     public ActionResult<AccountResponse> GetById(int id)
     {
         // users can get their own account and admins can get any account
@@ -166,8 +167,13 @@ public class AccountController(IAccountService accountService) : BaseController
 
     // helper methods
 
-    private void SetTokenCookie(string token)
+    private void SetTokenCookie(string? token)
     {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return;
+        }
+
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,

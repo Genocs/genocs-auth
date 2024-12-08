@@ -1,41 +1,41 @@
-using Genocs.Auth.WebApi.Helpers;
+using Genocs.Auth.WebApi.Configurations;
 using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Verify.V2.Service;
 
 namespace Genocs.Auth.WebApi.Services;
 
-public interface IMobileService
+public interface IMobileVerifyService
 {
     void Request(string phoneNumber);
     void Verify(string phoneNumber, string code);
 }
 
-public class MobileVerifyService : IMobileService
+public class MobileVerifyService : IMobileVerifyService
 {
-    private readonly AppSettings _appSettings;
+    private readonly TwilioOptions _twilioOptions;
 
-    public MobileVerifyService(IOptions<AppSettings> appSettings)
+    public MobileVerifyService(IOptions<TwilioOptions> twilioOptions)
     {
-        _appSettings = appSettings.Value;
-        TwilioClient.Init(_appSettings.SmsAccountSid, _appSettings.SmsAuthToken);
+        _twilioOptions = twilioOptions.Value;
+        TwilioClient.Init(_twilioOptions.SmsAccountSid, _twilioOptions.SmsAuthToken);
     }
 
     public void Request(string phoneNumber)
     {
-        var verification = VerificationResource.Create(
+        _ = VerificationResource.Create(
             to: phoneNumber,
             channel: "sms",
-            pathServiceSid: _appSettings.SmsServiceId
+            pathServiceSid: _twilioOptions.SmsServiceId
         );
     }
 
     public void Verify(string phoneNumber, string code)
     {
-        var verification = VerificationCheckResource.Create(
+        _ = VerificationCheckResource.Create(
             to: phoneNumber,
             code: code,
-            pathServiceSid: _appSettings.SmsServiceId
+            pathServiceSid: _twilioOptions.SmsServiceId
         );
     }
 }

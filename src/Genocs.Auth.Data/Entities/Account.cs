@@ -27,4 +27,23 @@ public class Account
     {
         return this.RefreshTokens?.Find(x => x.Token == token) != null;
     }
+
+    public Account AddRefreshToken(RefreshToken refreshToken)
+    {
+        RefreshTokens ??= [];
+        RefreshTokens.Add(refreshToken);
+
+        return this;
+    }
+
+    public Account RemoveOldRefreshTokens(int days)
+    {
+        if (RefreshTokens == null) return this;
+
+        RefreshTokens.RemoveAll(x =>
+            !x.IsActive &&
+            x.Created.AddDays(days) <= DateTime.UtcNow);
+
+        return this;
+    }
 }

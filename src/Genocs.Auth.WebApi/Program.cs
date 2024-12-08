@@ -1,36 +1,27 @@
 ﻿using Genocs.Auth.DataSqlServer;
 using Genocs.Auth.WebApi.Authorization;
+using Genocs.Auth.WebApi.Configurations;
 using Genocs.Auth.WebApi.Helpers;
 using Genocs.Auth.WebApi.Services;
+using Genocs.Core.Builders;
+using Genocs.Logging;
 using Genocs.Monitoring;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using Serilog.Events;
+using System.Text;
 using System.Text.Json.Serialization;
 
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-
+StaticLogger.EnsureInitialized();
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Host.UseSerilog((ctx, lc) =>
-{
-    lc.WriteTo.Console();
-    lc.WriteTo.ApplicationInsights(new TelemetryConfiguration
-    {
-        ConnectionString = builder.Configuration.GetConnectionString("ApplicationInsights")
-    }, TelemetryConverter.Traces);
+builder.Host.UseLogging();
 
-});
+IGenocsBuilder gnxBuilder = builder.AddGenocs();
 
 
 // add services to DI container
@@ -47,6 +38,31 @@ services.AddControllers().AddJsonOptions(x =>
     // serialize enums as strings in api responses (e.g. Role)
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+var tokenValidationParameters = new TokenValidationParameters();
+byte[] rawKey = Encoding.UTF8.GetBytes("THIS IS USED TO SIGN AND VERIFY JWT TOKENS, REPLACE IT WITH YOUR OWN SECRET, IT CAN BE ANY STRING");
+tokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(rawKey);
+tokenValidationParameters.ValidateAudience = false;
+tokenValidationParameters.ValidateIssuer = false;
+
+
+builder.Services.AddAuthentication()
+    .AddJwtBearer(o =>
+    {
+        o.Challenge = "Bearer";
+        o.TokenValidationParameters = tokenValidationParameters;
+    });
+
+builder.Services.AddAuthorization();
+//// Add services to the container.
+//// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+//builder.Services.AddOpenApi();
+
+
+//builder.Services.AddAuthorizationBuilder()
+//  .AddPolicy("admin_greetings", policy =>
+//        policy
+//            .RequireClaim("scope", "hardcoded_scope", "admin_greetings"));
 
 
 services.AddHealthChecks();
@@ -74,12 +90,18 @@ services.AddOptions();
 
 // configure strongly typed settings object
 services.Configure<AppSettings>(builder.Configuration.GetSection(AppSettings.Position));
+services.Configure<TwilioOptions>(builder.Configuration.GetSection(TwilioOptions.Position));
+services.Configure<SmtpEmailSenderOptions>(builder.Configuration.GetSection(SmtpEmailSenderOptions.Position));
+
+
 
 // configure DI for application services
 services.AddScoped<IJwtUtils, JwtUtils>();
 services.AddScoped<IAccountService, AccountService>();
-services.AddScoped<IEmailService, EmailService>();
-services.AddScoped<IMobileService, MobileVerifyService>();
+services.AddScoped<IEmailVerifyService, SmtpEmailVerifyService>();
+services.AddScoped<IMobileVerifyService, MobileVerifyService>();
+
+gnxBuilder.Build();
 
 var app = builder.Build();
 
@@ -114,11 +136,18 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.MapHealthChecks("/healthz");
+
+app.MapGet("/secret2", () => "This is a different secret!")
+    .RequireAuthorization(policy => policy.RequireClaim("admin_greetings", "full").Build());
+
+app.MapGet("/secret3", () => "This is a different secret!")
+    .RequireAuthorization(policy => policy.RequireClaim("admin_greetings", "full").Build());
 
 app.Run();
 

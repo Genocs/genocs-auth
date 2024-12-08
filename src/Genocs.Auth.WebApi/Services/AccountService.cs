@@ -6,6 +6,7 @@ using Genocs.Auth.Data.Entities;
 using Genocs.Auth.Data.Models.Accounts;
 using Genocs.Auth.DataSqlServer;
 using Genocs.Auth.WebApi.Authorization;
+using Genocs.Auth.WebApi.Configurations;
 using Genocs.Auth.WebApi.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -41,16 +42,16 @@ public class AccountService : IAccountService
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
-    private readonly IEmailService _emailService;
-    private readonly IMobileService _mobileService;
+    private readonly IEmailVerifyService _emailService;
+    private readonly IMobileVerifyService _mobileService;
 
 
     public AccountService(SqlServerDbContext context,
                           IJwtUtils jwtUtils,
                           IMapper mapper,
                           IOptions<AppSettings> appSettings,
-                          IEmailService emailService,
-                          IMobileService mobileService)
+                          IEmailVerifyService emailService,
+                          IMobileVerifyService mobileService)
     {
         ArgumentNullException.ThrowIfNull(appSettings);
 
@@ -67,16 +68,19 @@ public class AccountService : IAccountService
         var account = _context.Accounts.SingleOrDefault(x => x.Email == model.Email);
 
         // validate
-        if (account == null || !account.IsVerified || !BCrypt.Verify(model.Password, account.PasswordHash))
+        if (account == null || !BCrypt.Verify(model.Password, account.PasswordHash))
             throw new AppException("Email or password is incorrect");
+
+        // check if account is verified
+        if (!_appSettings.ValidUnverified && !account.IsVerified)
+            throw new AppException("Verification process not completed.");
 
         // authentication successful so generate jwt and refresh tokens
         var jwtToken = _jwtUtils.GenerateJwtToken(account);
         var refreshToken = _jwtUtils.GenerateRefreshToken(ipAddress);
-        account.RefreshTokens.Add(refreshToken);
-
-        // remove old refresh tokens from account
-        RemoveOldRefreshTokens(account);
+        account
+            .AddRefreshToken(refreshToken)
+            .RemoveOldRefreshTokens(_appSettings.RefreshTokenTTL);
 
         // save changes to db
         _context.Update(account);
@@ -106,10 +110,10 @@ public class AccountService : IAccountService
 
         // replace old refresh token with a new one (rotate token)
         var newRefreshToken = RotateRefreshToken(refreshToken, ipAddress);
-        account.RefreshTokens.Add(newRefreshToken);
 
-        // remove old refresh tokens from account
-        RemoveOldRefreshTokens(account);
+        account
+            .AddRefreshToken(newRefreshToken)
+            .RemoveOldRefreshTokens(_appSettings.RefreshTokenTTL);
 
         // save changes to db
         _context.Update(account);
@@ -409,12 +413,6 @@ public class AccountService : IAccountService
         return newRefreshToken;
     }
 
-    private void RemoveOldRefreshTokens(Account account)
-    {
-        account.RefreshTokens.RemoveAll(x =>
-            !x.IsActive &&
-            x.Created.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow);
-    }
 
     private void RevokeDescendantRefreshTokens(RefreshToken refreshToken, Account account, string ipAddress, string reason)
     {
