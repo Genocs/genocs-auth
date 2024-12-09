@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genocs.Auth.WebApi", "src\Genocs.Auth.WebApi\Genocs.Auth.WebApi.csproj", "{358A2DDF-9D49-4AC1-8A85-27A806488933}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSqlLite", "src\DataSqlLite\DataSqlLite.csproj", "{B0438DA7-85DA-4C57-8446-9E32FEDF747B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSqLite", "src\DataSqLite\DataSqLite.csproj", "{B0438DA7-85DA-4C57-8446-9E32FEDF747B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "src\Data\Data.csproj", "{DF863592-B316-4D9B-8D8C-57DAE3600F9A}"
 EndProject
@@ -14,8 +14,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{EB2D7B2A-35B6-4A78-8012-1BF4D1598C68}"
 	ProjectSection(SolutionItems) = preProject
 		api-workbench.rest = api-workbench.rest
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 		Dockerfile = Dockerfile
+		local.env = local.env
+		Makefile = Makefile
+		NuGet.config = NuGet.config
 		README.md = README.md
+		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "src\UnitTests\UnitTests.csproj", "{7F654CC7-635A-4C96-AD0D-4F5B54656CB6}"

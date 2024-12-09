@@ -43,7 +43,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\DataSqlLite\DataSqlLite.csproj" />
+		<ProjectReference Include="..\DataSqLite\DataSqLite.csproj" />
 		<ProjectReference Include="..\DataSqlServer\DataSqlServer.csproj" />
 	</ItemGroup>
 
