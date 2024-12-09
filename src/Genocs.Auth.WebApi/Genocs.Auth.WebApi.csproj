@@ -2,11 +2,23 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
+		<PackageId>Genocs.Auth.WebApi</PackageId>
+		<RootNamespace>Genocs.Auth.WebApi</RootNamespace>
+		<AssemblyName>Genocs.Auth.WebApi</AssemblyName>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Title>Genocs authorization solution.</Title>
+		<Description>Genocs authorization solution.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<MinClientVersion>5.0.0</MinClientVersion>
+		<Authors>Nocco Giovanni Emanuele</Authors>
+		<PackageTags>microservice microservices solid solid-principles genocs</PackageTags>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
 		<UserSecretsId>genocs</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..</DockerfileContext>
+
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -31,8 +43,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Genocs.Auth.DataSqlLite\Genocs.Auth.DataSqlLite.csproj" />
-		<ProjectReference Include="..\Genocs.Auth.DataSqlServer\Genocs.Auth.DataSqlServer.csproj" />
+		<ProjectReference Include="..\DataSqlLite\DataSqlLite.csproj" />
+		<ProjectReference Include="..\DataSqlServer\DataSqlServer.csproj" />
 	</ItemGroup>
 
 </Project>

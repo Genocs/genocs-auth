@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<PackageId>Genocs.Auth.Data</PackageId>
+		<RootNamespace>Genocs.Auth.Data</RootNamespace>
+		<AssemblyName>Genocs.Auth.Data</AssemblyName>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Title>Genocs authorization solution.</Title>
+		<Description>Genocs authorization solution.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<MinClientVersion>5.0.0</MinClientVersion>
+		<Authors>Nocco Giovanni Emanuele</Authors>
+		<PackageTags>microservice microservices solid solid-principles genocs</PackageTags>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.0" />
+	</ItemGroup>
+
+</Project>

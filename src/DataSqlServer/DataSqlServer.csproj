@@ -2,8 +2,19 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
+		<PackageId>Genocs.Auth.DataSqlServer</PackageId>
+		<RootNamespace>Genocs.Auth.DataSqlServer</RootNamespace>
+		<AssemblyName>Genocs.Auth.DataSqlServer</AssemblyName>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Title>Genocs authorization solution.</Title>
+		<Description>Genocs authorization solution.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<MinClientVersion>5.0.0</MinClientVersion>
+		<Authors>Nocco Giovanni Emanuele</Authors>
+		<PackageTags>microservice microservices solid solid-principles genocs</PackageTags>
+		<EnableNETAnalyzers>True</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Genocs.Auth.Data\Genocs.Auth.Data.csproj" />
+		<ProjectReference Include="..\Data\Data.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
