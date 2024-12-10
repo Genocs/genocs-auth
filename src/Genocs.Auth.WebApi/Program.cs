@@ -13,23 +13,19 @@ using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
 
-
 StaticLogger.EnsureInitialized();
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Host.UseLogging();
 
 IGenocsBuilder gnxBuilder = builder.AddGenocs();
-
 
 // add services to DI container
 var services = builder.Services;
 
 // Set Custom Open telemetry
 services.AddCustomOpenTelemetry(builder.Configuration);
-
 
 services.AddDbContext<SqlServerDbContext>();
 services.AddCors();
@@ -45,7 +41,6 @@ tokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(rawKey);
 tokenValidationParameters.ValidateAudience = false;
 tokenValidationParameters.ValidateIssuer = false;
 
-
 builder.Services.AddAuthentication()
     .AddJwtBearer(o =>
     {
@@ -58,13 +53,11 @@ builder.Services.AddAuthorization();
 //// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
-
 builder.Services.AddAuthorizationBuilder()
   .AddPolicy("admin_greetings_full", policy =>
         policy
             .RequireClaim("admin_greetings", "middle")
             .Build());
-
 
 services.AddHealthChecks();
 
@@ -75,7 +68,6 @@ services.Configure<HealthCheckPublisherOptions>(options =>
 });
 
 services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
@@ -93,8 +85,6 @@ services.AddOptions();
 services.Configure<AppSettings>(builder.Configuration.GetSection(AppSettings.Position));
 services.Configure<TwilioOptions>(builder.Configuration.GetSection(TwilioOptions.Position));
 services.Configure<SmtpEmailSenderOptions>(builder.Configuration.GetSection(SmtpEmailSenderOptions.Position));
-
-
 
 // configure DI for application services
 services.AddScoped<IJwtUtils, JwtUtils>();

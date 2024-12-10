@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<PackageId>Genocs.Auth.DataSqlLite</PackageId>
-		<RootNamespace>Genocs.Auth.DataSqlLite</RootNamespace>
-		<AssemblyName>Genocs.Auth.DataSqlLite</AssemblyName>
+		<RootNamespace>Genocs.Auth.DataSqLite</RootNamespace>
+		<AssemblyName>Genocs.Auth.DataSqLite</AssemblyName>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Title>Genocs authorization solution.</Title>

@@ -26,8 +26,7 @@ public class MobileVerifyService : IMobileVerifyService
         _ = VerificationResource.Create(
             to: phoneNumber,
             channel: "sms",
-            pathServiceSid: _twilioOptions.SmsServiceId
-        );
+            pathServiceSid: _twilioOptions.SmsServiceId);
     }
 
     public void Verify(string phoneNumber, string code)
@@ -35,7 +34,6 @@ public class MobileVerifyService : IMobileVerifyService
         _ = VerificationCheckResource.Create(
             to: phoneNumber,
             code: code,
-            pathServiceSid: _twilioOptions.SmsServiceId
-        );
+            pathServiceSid: _twilioOptions.SmsServiceId);
     }
 }

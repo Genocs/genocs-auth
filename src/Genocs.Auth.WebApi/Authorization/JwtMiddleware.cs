@@ -1,6 +1,6 @@
-namespace Genocs.Auth.WebApi.Authorization;
-
 using Genocs.Auth.DataSqlServer;
+
+namespace Genocs.Auth.WebApi.Authorization;
 
 public class JwtMiddleware(RequestDelegate next)
 {
@@ -8,10 +8,10 @@ public class JwtMiddleware(RequestDelegate next)
 
     public async Task Invoke(HttpContext context, SqlServerDbContext dataContext, IJwtUtils jwtUtils)
     {
-        var token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
+        string? token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
         if (!string.IsNullOrWhiteSpace(token))
         {
-            var accountId = jwtUtils.ValidateJwtToken(token);
+            int? accountId = jwtUtils.ValidateJwtToken(token);
             if (accountId != null)
             {
                 // attach account to context on successful jwt validation

@@ -1,10 +1,10 @@
-﻿namespace Genocs.Auth.WebApi.Controllers;
-
-using Genocs.Auth.Data.Entities;
+﻿using Genocs.Auth.Data.Entities;
 using Genocs.Auth.Data.Models.Accounts;
+using Genocs.Auth.WebApi.Authorization;
 using Genocs.Auth.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Authorization;
+
+namespace Genocs.Auth.WebApi.Controllers;
 
 [Authorize]
 [ApiController]
@@ -26,7 +26,7 @@ public class AccountController(IAccountService accountService) : BaseController
     [HttpPost("refresh-token")]
     public ActionResult<AuthenticateResponse> RefreshToken()
     {
-        var refreshToken = Request.Cookies["refreshToken"];
+        string? refreshToken = Request.Cookies["refreshToken"];
         var response = _accountService.RefreshToken(refreshToken, GetIpAddress());
         SetTokenCookie(response.RefreshToken);
         return Ok(response);
@@ -36,7 +36,7 @@ public class AccountController(IAccountService accountService) : BaseController
     public IActionResult RevokeToken(RevokeTokenRequest model)
     {
         // accept token from request body or cookie
-        var token = model.Token ?? Request.Cookies["refreshToken"];
+        string? token = model.Token ?? Request.Cookies["refreshToken"];
 
         if (string.IsNullOrEmpty(token))
             return BadRequest(new { message = "Token is required" });
@@ -179,6 +179,7 @@ public class AccountController(IAccountService accountService) : BaseController
             HttpOnly = true,
             Expires = DateTime.UtcNow.AddDays(7)
         };
+
         Response.Cookies.Append("refreshToken", token, cookieOptions);
     }
 

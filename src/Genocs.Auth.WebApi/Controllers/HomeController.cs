@@ -1,5 +1,6 @@
-﻿namespace Genocs.Auth.WebApi.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Genocs.Auth.WebApi.Controllers;
 
 [ApiController]
 [Route("")]

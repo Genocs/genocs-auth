@@ -27,8 +27,8 @@ dotnet ef migrations add InitialCreate
 # Update the database with the initial migration
 dotnet ef database update
 
-# Create the initial migration for the Genocs.Auth.DatasqlLite project
-cd .\src\Genocs.Auth.DataSqlLite
+# Create the initial migration for the Genocs.Auth.DataSqLite project
+cd .\src\Genocs.Auth.DataSqLite
 dotnet ef migrations add InitialCreate
 
 # Update the database with the initial migration

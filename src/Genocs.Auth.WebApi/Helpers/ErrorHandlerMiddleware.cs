@@ -1,7 +1,7 @@
-namespace Genocs.Auth.WebApi.Helpers;
-
 using System.Net;
 using System.Text.Json;
+
+namespace Genocs.Auth.WebApi.Helpers;
 
 public class ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
 {
@@ -36,7 +36,7 @@ public class ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMi
                     break;
             }
 
-            var result = JsonSerializer.Serialize(new { message = error?.Message });
+            string result = JsonSerializer.Serialize(new { message = error?.Message });
             await response.WriteAsync(result);
         }
     }

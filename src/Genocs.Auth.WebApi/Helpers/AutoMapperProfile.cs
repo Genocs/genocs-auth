@@ -1,8 +1,8 @@
-namespace Genocs.Auth.WebApi.Helpers;
-
 using AutoMapper;
 using Genocs.Auth.Data.Entities;
 using Genocs.Auth.Data.Models.Accounts;
+
+namespace Genocs.Auth.WebApi.Helpers;
 
 public class AutoMapperProfile : Profile
 {
@@ -29,7 +29,6 @@ public class AutoMapperProfile : Profile
                     if (x.DestinationMember.Name == "Role" && src.Role == null) return false;
 
                     return true;
-                }
-            ));
+                }));
     }
 }

@@ -1,5 +1,3 @@
-namespace Genocs.Auth.WebApi.Authorization;
-
 using Genocs.Auth.Data.Entities;
 using Genocs.Auth.DataSqlServer;
 using Genocs.Auth.WebApi.Configurations;
@@ -9,6 +7,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+
+namespace Genocs.Auth.WebApi.Authorization;
 
 public interface IJwtUtils
 {
@@ -27,12 +27,12 @@ public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSetti
     {
         // generate token that is valid for 15 minutes
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
-        {            
+        {
             Subject = new ClaimsIdentity([
-                new Claim("id", account.Id.ToString()), 
-                new Claim("role", account.Role.ToString()), 
+                new Claim("id", account.Id.ToString()),
+                new Claim("role", account.Role.ToString()),
                 new Claim("scope", "hardcoded_scope"),
                 new Claim("admin_greetings", "hardcoded_scope", ClaimValueTypes.String),
                 new Claim("admin_greetings", "full", ClaimValueTypes.String),
@@ -42,6 +42,7 @@ public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSetti
             Expires = DateTime.UtcNow.AddMinutes(15),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
@@ -52,7 +53,7 @@ public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSetti
             return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -61,15 +62,13 @@ public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSetti
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
             // return account id from JWT token if validation successful
-            return accountId;
+            return int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
         }
         catch
         {
@@ -83,15 +82,14 @@ public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSetti
         var refreshToken = new RefreshToken
         {
             // token is a cryptographically strong random sequence of values
-            Token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
-            // token is valid for 7 days
-            Expires = DateTime.UtcNow.AddDays(7),
+            Token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),           
+            Expires = DateTime.UtcNow.AddDays(7), // token is valid for 7 days
             Created = DateTime.UtcNow,
             CreatedByIp = ipAddress
         };
 
         // ensure token is unique by checking against db
-        var tokenIsUnique = !_context.Accounts.Any(a => a.RefreshTokens.Any(t => t.Token == refreshToken.Token));
+        bool tokenIsUnique = !_context.Accounts.Any(a => a.RefreshTokens.Any(t => t.Token == refreshToken.Token));
 
         if (!tokenIsUnique)
             return GenerateRefreshToken(ipAddress);

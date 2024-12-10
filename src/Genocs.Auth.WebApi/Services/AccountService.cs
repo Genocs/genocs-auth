@@ -1,7 +1,4 @@
-namespace Genocs.Auth.WebApi.Services;
-
 using AutoMapper;
-using BCrypt.Net;
 using Genocs.Auth.Data.Entities;
 using Genocs.Auth.Data.Models.Accounts;
 using Genocs.Auth.DataSqlServer;
@@ -14,6 +11,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+
+namespace Genocs.Auth.WebApi.Services;
+
+using BCrypt.Net;
 
 public interface IAccountService
 {
@@ -45,13 +46,13 @@ public class AccountService : IAccountService
     private readonly IEmailVerifyService _emailService;
     private readonly IMobileVerifyService _mobileService;
 
-
-    public AccountService(SqlServerDbContext context,
-                          IJwtUtils jwtUtils,
-                          IMapper mapper,
-                          IOptions<AppSettings> appSettings,
-                          IEmailVerifyService emailService,
-                          IMobileVerifyService mobileService)
+    public AccountService(
+                            SqlServerDbContext context,
+                            IJwtUtils jwtUtils,
+                            IMapper mapper,
+                            IOptions<AppSettings> appSettings,
+                            IEmailVerifyService emailService,
+                            IMobileVerifyService mobileService)
     {
         ArgumentNullException.ThrowIfNull(appSettings);
 

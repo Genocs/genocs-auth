@@ -1,27 +1,27 @@
-namespace Genocs.Auth.DataSqlLite;
+namespace Genocs.Auth.DataSqLite;
 
 using Genocs.Auth.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-public class SqlLiteDbContext : DbContext
+public class SqLiteDbContext : DbContext
 {
     public DbSet<Account> Accounts { get; set; }
 
     private readonly IConfiguration Configuration;
 
-    public SqlLiteDbContext()
+    public SqLiteDbContext()
     {
     }
 
-    public SqlLiteDbContext(IConfiguration configuration)
+    public SqLiteDbContext(IConfiguration configuration)
     {
         Configuration = configuration;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SqlLiteDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SqLiteDbContext).Assembly);
     }
 
 
