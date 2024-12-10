@@ -1,3 +1,4 @@
+using Genocs.Auth.DataSqLite;
 using Genocs.Auth.DataSqlServer;
 
 namespace Genocs.Auth.WebApi.Authorization;
@@ -6,7 +7,7 @@ public class JwtMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
 
-    public async Task Invoke(HttpContext context, SqlServerDbContext dataContext, IJwtUtils jwtUtils)
+    public async Task Invoke(HttpContext context, SqLiteDbContext dataContext, IJwtUtils jwtUtils)
     {
         string? token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
         if (!string.IsNullOrWhiteSpace(token))

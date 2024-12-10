@@ -1,4 +1,5 @@
-﻿using Genocs.Auth.DataSqlServer;
+﻿using Genocs.Auth.DataSqLite;
+using Genocs.Auth.DataSqlServer;
 using Genocs.Auth.WebApi.Authorization;
 using Genocs.Auth.WebApi.Configurations;
 using Genocs.Auth.WebApi.Helpers;
@@ -27,7 +28,10 @@ var services = builder.Services;
 // Set Custom Open telemetry
 services.AddCustomOpenTelemetry(builder.Configuration);
 
-services.AddDbContext<SqlServerDbContext>();
+// services.AddDbContext<SqlServerDbContext>();
+
+services.AddDbContext<SqLiteDbContext>();
+
 services.AddCors();
 services.AddControllers().AddJsonOptions(x =>
 {
@@ -97,9 +101,17 @@ gnxBuilder.Build();
 var app = builder.Build();
 
 // migrate any database changes on startup (includes initial db creation)
+/*
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<SqlServerDbContext>();
+    dataContext.Database.Migrate();
+}
+*/
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<SqLiteDbContext>();
     dataContext.Database.Migrate();
 }
 

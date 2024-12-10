@@ -1,6 +1,7 @@
 using AutoMapper;
 using Genocs.Auth.Data.Entities;
 using Genocs.Auth.Data.Models.Accounts;
+using Genocs.Auth.DataSqLite;
 using Genocs.Auth.DataSqlServer;
 using Genocs.Auth.WebApi.Authorization;
 using Genocs.Auth.WebApi.Configurations;
@@ -13,8 +14,6 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace Genocs.Auth.WebApi.Services;
-
-using BCrypt.Net;
 
 public interface IAccountService
 {
@@ -39,7 +38,7 @@ public interface IAccountService
 
 public class AccountService : IAccountService
 {
-    private readonly SqlServerDbContext _context;
+    private readonly SqLiteDbContext _context;
     private readonly IJwtUtils _jwtUtils;
     private readonly IMapper _mapper;
     private readonly AppSettings _appSettings;
@@ -47,7 +46,7 @@ public class AccountService : IAccountService
     private readonly IMobileVerifyService _mobileService;
 
     public AccountService(
-                            SqlServerDbContext context,
+                            SqLiteDbContext context,
                             IJwtUtils jwtUtils,
                             IMapper mapper,
                             IOptions<AppSettings> appSettings,
@@ -69,7 +68,7 @@ public class AccountService : IAccountService
         var account = _context.Accounts.SingleOrDefault(x => x.Email == model.Email);
 
         // validate
-        if (account == null || !BCrypt.Verify(model.Password, account.PasswordHash))
+        if (account == null || !BCrypt.Net.BCrypt.Verify(model.Password, account.PasswordHash))
             throw new AppException("Email or password is incorrect");
 
         // check if account is verified
@@ -164,7 +163,7 @@ public class AccountService : IAccountService
         account.VerificationToken = GenerateVerificationToken();
 
         // hash password
-        account.PasswordHash = BCrypt.HashPassword(model.Password);
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
         // save account
         _context.Accounts.Add(account);
@@ -257,7 +256,7 @@ public class AccountService : IAccountService
         var account = GetAccountByResetToken(model.Token);
 
         // update password and remove reset token
-        account.PasswordHash = BCrypt.HashPassword(model.Password);
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
         account.PasswordReset = DateTime.UtcNow;
         account.ResetToken = null;
         account.ResetTokenExpires = null;
@@ -289,7 +288,7 @@ public class AccountService : IAccountService
         account.Created = DateTime.UtcNow;
 
         // hash password
-        account.PasswordHash = BCrypt.HashPassword(model.Password);
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
         // save account
         _context.Accounts.Add(account);
@@ -308,7 +307,7 @@ public class AccountService : IAccountService
 
         // hash password if it was entered
         if (!string.IsNullOrEmpty(model.Password))
-            account.PasswordHash = BCrypt.HashPassword(model.Password);
+            account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
         if (model.Email != account.Email)
         {

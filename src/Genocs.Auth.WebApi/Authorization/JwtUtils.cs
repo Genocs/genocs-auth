@@ -1,4 +1,5 @@
 using Genocs.Auth.Data.Entities;
+using Genocs.Auth.DataSqLite;
 using Genocs.Auth.DataSqlServer;
 using Genocs.Auth.WebApi.Configurations;
 using Microsoft.Extensions.Options;
@@ -17,10 +18,10 @@ public interface IJwtUtils
     public RefreshToken GenerateRefreshToken(string? ipAddress);
 }
 
-public class JwtUtils(SqlServerDbContext context, IOptions<AppSettings> appSettings)
+public class JwtUtils(SqLiteDbContext context, IOptions<AppSettings> appSettings)
     : IJwtUtils
 {
-    private readonly SqlServerDbContext _context = context;
+    private readonly SqLiteDbContext _context = context;
     private readonly AppSettings _appSettings = appSettings.Value;
 
     public string GenerateJwtToken(Account account)

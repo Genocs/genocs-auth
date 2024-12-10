@@ -438,6 +438,6 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 ## *.env
-/src/Genocs.Auth.WebApi/Genocs.Auth.Lite.db
-/src/Genocs.Auth.WebApi/Genocs.Auth.Lite.db-shm
-/src/Genocs.Auth.WebApi/Genocs.Auth.Lite.db-wal
+*.db
+*.db-shm
+*.db-wal

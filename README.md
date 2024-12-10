@@ -20,18 +20,26 @@ dotnet tool update -g dotnet-ef
 ```
 
 ```PS
-# Create the initial migration for the Genocs.Auth.DataSqlServer project
-cd .\src\Genocs.Auth.DataSqlServer
+# Create the initial migration for the DataSqlServer project
+cd .\src\DataSqlServer
 dotnet ef migrations add InitialCreate
 
 # Update the database with the initial migration
 dotnet ef database update
 
-# Create the initial migration for the Genocs.Auth.DataSqLite project
-cd .\src\Genocs.Auth.DataSqLite
+# Create the initial migration for the DataSqLite project
+cd .\src\DataSqLite
 dotnet ef migrations add InitialCreate
 
 # Update the database with the initial migration
 dotnet ef database update
+```
 
+## How to use docker
+```PS
+# Build the docker image
+docker build -t genocs-auth-api .
+
+# Run the docker container
+docker run -d -p 80:8080 genocs-auth-api
 ```
